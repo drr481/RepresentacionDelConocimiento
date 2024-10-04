@@ -1,0 +1,2 @@
+# Evita que la carpeta .venv se suba al repositorio
+.venv/
