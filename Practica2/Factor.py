@@ -93,7 +93,15 @@ def dependencias(factor):
     """
     Devuelve una lista de las variables de las que depende un factor. 
     """
-    return factor.variables
+
+    listaVariables = []
+
+    for i in factor.variables:
+        if i not in factor.variables:
+            x = i.split('^')[0]
+            listaVariables.append(x)
+
+    return listaVariables
 
 def getIdentificador(factor):
     """
