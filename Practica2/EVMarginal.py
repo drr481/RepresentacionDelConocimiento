@@ -18,7 +18,7 @@ def marginal(factores, variables):
             lista.append(factores[i])
             factores.delete(i)
     if (len(lista) == 1):
-        factores.append(marginal(lista, variables))
+        factores.append(factor.marginalizacion(lista, eliminar))
     else:
         producto = lista[0]
         for i in range(len(lista) - 1):
