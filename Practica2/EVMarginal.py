@@ -13,8 +13,8 @@ def marginal(factores, variables):
     print(eliminar)
     lista = []
     for i in range(len(factores)):
-        print(factores[i].dependencias())
-        if eliminar in factores[i].dependencias():
+        print(factor.dependencias(factores[i]))
+        if eliminar in factor.dependencias(factores[i]):
             lista.append(factores[i])
             factores.delete(i)
     if (len(lista) == 1):
