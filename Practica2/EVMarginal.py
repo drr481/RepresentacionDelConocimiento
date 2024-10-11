@@ -16,7 +16,7 @@ def marginal(factores, variables):
         print(factores[i].variables)
         if eliminar in factores[i].variables:
             lista.append(factores[i])
-            factores.pop(i)
+            factores.delete(i)
     if (len(lista) == 1):
         factores.append(marginal(lista, variables))
     else:
