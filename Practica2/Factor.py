@@ -27,22 +27,6 @@ class Factor:
         print(f"Valores:\n{self.valores}\n")
 
 
-def eliminacion(factor, variable_a_eliminar):
-    """
-    Elimina una variable de las que dependen los valores del factor. 
-    """
-    if variable_a_eliminar not in factor.variables:
-        raise ValueError(f"La variable {variable_a_eliminar} no está en el factor.")
-    
-    idx = factor.variables.index(variable_a_eliminar)
-    nuevas_variables = [v for v in factor.variables if v != variable_a_eliminar]
-    nueva_matriz = np.delete(factor.valores, idx, axis=1)
-    
-    nuevo_factor = Factor(factor.identificador, nuevas_variables, nueva_matriz, factor.propios)
-    print(f"Eliminando la variable {variable_a_eliminar} del factor del nodo {factor.identificador}:")
-    nuevo_factor.imprimir()
-    
-    return nuevo_factor
 
 
 def producto_de_factores(factor1, factor2):
@@ -80,10 +64,10 @@ def marginalizacion(factor, variable_a_eliminar):
     
     idx = factor.variables.index(variable_a_eliminar)
     nuevas_variables = [v for v in factor.variables if v != variable_a_eliminar]
-    nueva_matriz = np.sum(factor.valores, axis=idx)
+    nueva_matriz = np.delete(factor.valores, idx, axis=1)
     
     nuevo_factor = Factor(factor.identificador, nuevas_variables, nueva_matriz, factor.propios)
-    print(f"Marginalización sobre la variable {variable_a_eliminar} en el nodo {factor.identificador}:")
+    print(f"Eliminando la variable {variable_a_eliminar} del factor del nodo {factor.identificador}:")
     nuevo_factor.imprimir()
     
     return nuevo_factor
