@@ -97,8 +97,8 @@ def dependencias(factor):
     listaVariables = []
 
     for i in factor.variables:
-        if i not in factor.variables:
-            x = i.split('^')[0]
+        x = i.split('^')[0]
+        if x not in listaVariables:
             listaVariables.append(x)
 
     return listaVariables
