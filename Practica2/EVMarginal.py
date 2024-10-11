@@ -29,7 +29,6 @@ def marginal(factores, variables):
     
 f_D = factor.Factor('D', [], [[0.6], [0.4]], propios=['d^0', 'd^1'])
 
-
 f_E = factor.Factor('E', [], [[0.8], [0.2]], propios=['e^0', 'e^1'])
 
 

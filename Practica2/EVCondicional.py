@@ -20,23 +20,18 @@ class EVCondicional:
         self.eliminaHojas(conjuntoFactores, exp, variables)
 
         # Eliminar los valores de exp.B de conjuntoFactores en caso de sean valores explicitos en vez de variables
-        variables = [var for var in variables if not isinstance(var, int)]
+        for factor in conjuntoFactores:
+            for i in exp.B:
+                if i in factor.propios:
+                    factor.propios.remove(i)
 
         # Ordenar las variables a eliminar
         variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores, exp.B)
 
-        # Escogemos los factores que contienen la variable a eliminar
-        for factor in conjuntoFactores:
-            for var in variablesAEliminar:
-                if var in factor.variables:
-                    nuevosFactores.append(factor)
-
-        # Llamamos a la funcion elimina de la clase factor, que recive los factores anteriores y la variable a eliminar
-        for factor in nuevosFactores:
-            for var in variablesAEliminar:
-                nuevosFactores = f.elimina(factor, var)
-
-        # Repetimos los dos pasos anteriores hasta que no queden variables a eliminar
+        # Por cada variable a eliminar, marginalizamos esa variable
+            # Agrupamos los factores que dependen de la variable a eliminar
+            # Marginalizamos los factores agrupados
+            # Sustituimos 
 
         return nuevosFactores, variablesAEliminar
     
