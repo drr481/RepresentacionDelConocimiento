@@ -3,7 +3,7 @@ import Factor as factor
 
 
 
-def marginalfinal(factores, variables):
+def marginal(factores, variables):
     
     
 
@@ -124,8 +124,8 @@ letras = ['c', 'e', 'd', 'a']
 # Genera todas las permutaciones posibles y almacenarlas en una lista
 lista_permutaciones = [list(p) for p in itertools.permutations(letras)]
 
-probabilidad_b = marginalfinal(factores, lista_permutaciones[2])
+probabilidad_b = marginal(factores, lista_permutaciones[2])
 print(probabilidad_b)
-#Falla en 13,19
+
 
 

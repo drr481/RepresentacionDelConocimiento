@@ -17,6 +17,7 @@ class EVCondicional:
         variablesAEliminar = []
 
         # Elimina las hojas
+<<<<<<< HEAD
         self.eliminaHojas(conjuntoFactores)
 
         # Eliminar los valores de exp.B de conjuntoFactores en caso de sean valores explicitos en vez de variables
@@ -34,6 +35,45 @@ class EVCondicional:
     
     def eliminaHojas(self, factores):
         pass
+=======
+        self.eliminaHojas(conjuntoFactores, exp, variables)
+
+        # Eliminar los valores de exp.B de conjuntoFactores en caso de sean valores explicitos en vez de variables
+        for factor in conjuntoFactores:
+            for i in exp.B:
+                if i in factor.propios:
+                    factor.propios.remove(i)
+
+        # Ordenar las variables a eliminar
+        variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores, exp.B)
+
+        # Por cada variable a eliminar, marginalizamos esa variable
+            # Agrupamos los factores que dependen de la variable a eliminar
+            # Marginalizamos los factores agrupados
+            # Sustituimos 
+
+        return nuevosFactores, variablesAEliminar
+    
+    def eliminaHojas(self, factores, exp, variables):
+        lista = []
+        for i in factores:
+            self.elimina_hojas_recursivo(factores, i, lista, exp, variables)
+
+    def elimina_hojas_recursivo(self, factores, nodo, lista, exp, variables):
+        lista.append(nodo)
+        for hijo in f.dependencias(nodo):
+            if hijo not in lista:
+                self.elimina_hojas_recursivo(factores, hijo, lista, exp, variables)
+        
+        if self.esHoja(nodo, factores) and nodo not in exp.A and nodo not in exp.B and nodo not in variables:
+            factores.remove(nodo)
+
+    def esHoja(self, factor, factores):
+        for fac in factores:
+            if factor in f.dependencias(fac):
+                return False
+        return True
+>>>>>>> ac319ff64ea2ee94cbeb68ad5ff6e8aace46374a
 
     def ordenaVariables(self, variables, conjuntoFactores, raiz):
         if self.esArbol(conjuntoFactores, raiz):
@@ -72,10 +112,22 @@ class EVCondicional:
     
     def minimosVecinos(self, variables, conjuntoFactores):
         
+<<<<<<< HEAD
         lista = []
+=======
+>>>>>>> ac319ff64ea2ee94cbeb68ad5ff6e8aace46374a
         vecinos_dict = {var: 0 for var in variables}
         
         for factor in conjuntoFactores:
             for var in variables:
+<<<<<<< HEAD
                 if var in factor.variables:
                     vecinos_dict[var] = vecinos_dict[var] + 1
+=======
+                if var in f.dependencias(factor):
+                    vecinos_dict[var] += 1
+
+        vecinos_dict = dict(sorted(vecinos_dict.items(), key=lambda item: item[1]))
+
+        return list(vecinos_dict.keys())
+>>>>>>> ac319ff64ea2ee94cbeb68ad5ff6e8aace46374a
