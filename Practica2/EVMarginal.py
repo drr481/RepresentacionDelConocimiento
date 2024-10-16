@@ -1,3 +1,4 @@
+import itertools
 import Factor as factor
 
 
@@ -13,10 +14,7 @@ def marginalfinal(factores, variables):
         
         variableEliminar = variables.pop(0)
          
-        if variableEliminar == None:
-            return probabilidad
-
-
+       
         factores_eliminar = []
       
         for f in factores:
@@ -117,6 +115,17 @@ f_B = factor.Factor('b', ['a^0', 'a^1', 'a^2'],  prob_b_dado_a, propios=['b^0', 
 
 
 factores = [f_A, f_E, f_C, f_D, f_B] #lista de factores que va cambiando segun la iteración
-lista_variables = ['c','e','d','a'] #lista con el orden de las variables a eliminar
 
-probabilidad_b = marginalfinal(factores, lista_variables)
+
+# Definir las letras
+letras = ['c', 'e', 'd', 'a']
+
+
+# Genera todas las permutaciones posibles y almacenarlas en una lista
+lista_permutaciones = [list(p) for p in itertools.permutations(letras)]
+
+probabilidad_b = marginalfinal(factores, lista_permutaciones[2])
+print(probabilidad_b)
+#Falla en 13,19
+
+
