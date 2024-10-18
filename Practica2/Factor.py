@@ -50,8 +50,6 @@ def eliminacion(factores_marginalizados, variable_a_eliminar):
         if len(nueva_llave) == 1:
             nueva_llave = nueva_llave[0]
         
-
-        
         # Agregar la nueva llave al mapa_nuevo
         # Verificamos si la nueva_llave ya está en el diccionario para evitar sobreescribir
         if nueva_llave in nuevos_valores:
@@ -94,7 +92,6 @@ def producto_de_factores(factor1, factor2):
 
     #nuevas_variables = list(set(factor1.valores_variablesdep + factor1.propios + factor2.propios+ factor2.valores_variablesdep))
     
-    encontrada = False
     nuevos_valores = {}
     
     nuevos_valores = producto_factores(factor1.valores, factor2.valores)
@@ -177,14 +174,10 @@ def marginalizacion(lista_factores, variable_a_marginar):
     if variable_a_marginar not in lista_factores[0].dependencias:
         raise ValueError(f"La variable {variable_a_marginar} no está en el factor.")
     
-    if len(lista_factores) == 1:
-        
+    if len(lista_factores) == 1:     
        
-        nuevas_variables = [v for v in lista_factores[0].dependencias if v != variable_a_marginar]
+        #nuevas_variables = [v for v in lista_factores[0].dependencias if v != variable_a_marginar]
         nuevo_factor = Factor(lista_factores[0].identificador, None,  lista_factores[0].valores, lista_factores[0].propios, lista_factores[0].dependencias)
-        
-       
-
 
     
     else:
@@ -199,7 +192,10 @@ def marginalizacion(lista_factores, variable_a_marginar):
     nuevo_factor.imprimir()
     return nuevo_factor
 
-
+def eliminadependencias(factor, variable):
+   for llave in factor.valores.keys():
+       if variable not in llave:
+           factor.valores.pop(llave)
 
 
 def getIdentificador(factor):

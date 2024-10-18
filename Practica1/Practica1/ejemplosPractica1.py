@@ -3,7 +3,7 @@ from Practica1 import algoritmo_separacion
 import matplotlib.pyplot as plt
 
 # Crea una lista de grafos con diferentes componentes conectadas
-graphs = [nx.DiGraph() for _ in range(5)]
+graphs = [nx.DiGraph() for _ in range(6)]
 
 #1.Grafo sin componentes no conexos
 graphs[0].add_edges_from([('A', 'C'), ('B', 'C'), ('C', 'D'),
@@ -29,6 +29,18 @@ graphs[3].add_edges_from([('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'E'), ('E', 
 #5.Grafo vacío
 #Sería el último grafo de la lista, graphs[4]
 
+
+
+
+graphs[5].add_edges_from([('A', 'C'), ('A', 'D'), ('B', 'D'), ('C', 'F'),('D', 'F'), ('D', 'G'), ('B', 'E')])
+
+
+#No Separables en el grafo
+x_y = {'B', 'F'}
+z = {'D'}
+print("x_y:", x_y)
+print("z:", z)
+print(f"Resultados G{5}: {algoritmo_separacion(graphs[5], x_y, z)}\n")
 
 '''
 Metodología para mostrar los grafos en uno de los cuadrantes resultantes de dividir la ventana

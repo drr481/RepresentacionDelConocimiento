@@ -36,6 +36,13 @@ def marginal(factores, variables):
         nuevo_factores.append(resultado_eliminacion)
         
         return marginalrecursivo(nuevo_factores, variables, resultado_eliminacion)
+    
+    if variables == []:
+        raise ValueError("La lista está vacía")
+    if factores == []:
+        raise ValueError("No hay factores")
+    
+   
 
     return marginalrecursivo(factores, variables, None)
     
@@ -117,7 +124,7 @@ f_B = factor.Factor('b', ['a^0', 'a^1', 'a^2'],  prob_b_dado_a, propios=['b^0', 
 factores = [f_A, f_E, f_C, f_D, f_B] #lista de factores que va cambiando segun la iteración
 
 
-# Definir las letras
+# Definir las letras  
 letras = ['c', 'e', 'd', 'a']
 
 
