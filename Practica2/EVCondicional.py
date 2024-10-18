@@ -34,8 +34,20 @@ class EVCondicional:
 
         return numerador / denominador
     
-    def eliminaHojas(self, factores):
-        pass
+    def eliminaHojas(self, conjuntoFactores):
+        lista = []
+        return self.eliminaHojasRecursivo(conjuntoFactores, lista, conjuntoFactores[0])
+
+    def eliminaHojasRecursivo(self, conjuntoFactores, lista, nodo):
+            
+        lista.append(nodo)
+    
+        for i in self.buscaDependencias(nodo):
+            if i not in lista:
+                self.eliminaHojasRecursivo(conjuntoFactores, lista, i)
+            
+        if esHoja(nodo):
+            conjuntoFactores.remove(nodo)
 
     def ordenaVariables(self, variables, conjuntoFactores, raiz):
         if self.esArbol(conjuntoFactores, raiz):
@@ -81,3 +93,13 @@ class EVCondicional:
             for var in variables:
                 if var in factor.variables:
                     vecinos_dict[var] = vecinos_dict[var] + 1
+
+    def buscaDependencias(self, factor):
+        dependencias = []
+
+        for i in self.conjuntoFactores:
+            if factor.identificador in i.dependencias:
+                dependencias.append(i)
+
+        return dependencias
+
