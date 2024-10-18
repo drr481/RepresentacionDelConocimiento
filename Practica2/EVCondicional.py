@@ -13,24 +13,26 @@ class EVCondicional:
 
     def eliminaVariablesCondicional(self, exp, variables, conjuntoFactores):
 
-        nuevosFactores = []
         variablesAEliminar = []
 
         # Elimina las hojas
         self.eliminaHojas(conjuntoFactores)
 
         # Eliminar los valores de exp.B de conjuntoFactores en caso de sean valores explicitos en vez de variables
-        
+        for factor in conjuntoFactores:
+            for i in exp.B:
+                if i in factor.dependencias:
+                    f.eliminadependencias(factor, i)
+                    exp.B.remove(i)
 
         # Ordenar las variables a eliminar
+        variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores, exp.A)
 
-        # Escogemos los factores que contienen la variable a eliminar
+        numerador = EVMarginal.EVMarginal(conjuntoFactores, variablesAEliminar)
 
-        # Llamamos a la funcion elimina, que recive los factores anteriores y la variable a eliminar
+        denominador = EVMarginal.EVMarginal(exp.B, variablesAEliminar)
 
-        # Repetimos los dos pasos anteriores hasta que no queden variables a eliminar
-
-        return nuevosFactores, variablesAEliminar
+        return numerador / denominador
     
     def eliminaHojas(self, factores):
         pass
