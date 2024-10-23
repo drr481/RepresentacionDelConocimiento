@@ -11,7 +11,9 @@ class EVCondicional:
     def __init__(self, conjuntoFactores):
         self.conjuntoFactores = conjuntoFactores
 
-    def eliminaVariablesCondicional(self, exp, variables, conjuntoFactores):
+    def eliminaVariablesCondicional(self, A, B, variables, conjuntoFactores):
+
+        exp = Expresion(A, B)
 
         variablesAEliminar = []
 
@@ -26,7 +28,7 @@ class EVCondicional:
                     exp.B.remove(i)
 
         # Ordenar las variables a eliminar
-        variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores, exp.A)
+        variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores, exp.B)
 
         numerador = EVMarginal.EVMarginal(conjuntoFactores, variablesAEliminar)
 
@@ -46,8 +48,15 @@ class EVCondicional:
             if i not in lista:
                 self.eliminaHojasRecursivo(conjuntoFactores, lista, i)
             
-        if esHoja(nodo):
+        if self.esHoja(nodo, conjuntoFactores):
             conjuntoFactores.remove(nodo)
+
+    def esHoja(self, nodo, conjuntoFactores):
+        for i in conjuntoFactores:
+            if nodo.identificador in i.dependencias:
+                return False
+        return True
+        
 
     def ordenaVariables(self, variables, conjuntoFactores, raiz):
         if self.esArbol(conjuntoFactores, raiz):
@@ -63,7 +72,7 @@ class EVCondicional:
         
         listaExplorados.append(nodo)
 
-        for i in nodo.vecinos:
+        for i in nodo.dependencias:
             if i not in listaExplorados:
                 return self.esArbolRecursivo(conjuntoFactores, listaExplorados, i)
             else:
