@@ -23,16 +23,16 @@ class EVCondicional:
         # Eliminar los valores de exp.B de conjuntoFactores en caso de sean valores explicitos en vez de variables
         for factor in conjuntoFactores:
             for i in exp.B:
-                if i in factor.dependencias:
+                if i in factor.valores_variablesdep:
                     f.eliminadependencias(factor, i)
                     exp.B.remove(i)
 
         # Ordenar las variables a eliminar
-        variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores, exp.B)
+        variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores)
 
-        numerador = EVMarginal.EVMarginal(conjuntoFactores, variablesAEliminar)
+        numerador = EVMarginal.marginal(conjuntoFactores, variablesAEliminar)
 
-        denominador = EVMarginal.EVMarginal(exp.B, variablesAEliminar)
+        denominador = EVMarginal.marginal(numerador, exp.A)
 
         return numerador / denominador
     
@@ -58,21 +58,26 @@ class EVCondicional:
         return True
         
 
-    def ordenaVariables(self, variables, conjuntoFactores, raiz):
-        if self.esArbol(conjuntoFactores, raiz):
-            return self.posorden(variables, conjuntoFactores, raiz)
+    def ordenaVariables(self, variables, conjuntoFactores):
+        if self.esArbol(conjuntoFactores):
+            return self.posorden(variables, conjuntoFactores)
         else:
             return self.minimosVecinos(variables, conjuntoFactores)
         
-    def esArbol(self, conjuntoFactores, raiz):
+    def esArbol(self, conjuntoFactores):
         listaExplorados = []
-        return self.esArbolRecursivo(conjuntoFactores, listaExplorados, conjuntoFactores[raiz])
+        return self.esArbolRecursivo(conjuntoFactores, listaExplorados, conjuntoFactores[0])
     
     def esArbolRecursivo(self, conjuntoFactores, listaExplorados, nodo):
         
         listaExplorados.append(nodo)
 
-        for i in nodo.dependencias:
+        nodoDependencias = []
+        for i in conjuntoFactores:
+            if i.identificador in nodo.dependencias:
+                nodoDependencias.append(i)
+
+        for i in nodoDependencias:
             if i not in listaExplorados:
                 return self.esArbolRecursivo(conjuntoFactores, listaExplorados, i)
             else:
@@ -80,9 +85,9 @@ class EVCondicional:
             
         return True
     
-    def posorden(self, variables, conjuntoFactores, raiz):
+    def posorden(self, variables, conjuntoFactores):
         listaExplorados = []
-        return self.posordenRecursivo(variables, conjuntoFactores, listaExplorados, conjuntoFactores[raiz])
+        return self.posordenRecursivo(variables, conjuntoFactores, listaExplorados, conjuntoFactores[0])
 
     def posordenRecursivo(self, variables, conjuntoFactores, listaExplorados, nodo):
             
@@ -95,13 +100,25 @@ class EVCondicional:
     
     def minimosVecinos(self, variables, conjuntoFactores):
         
-        lista = []
-        vecinos_dict = {var: 0 for var in variables}
+        newVar = []
+        for j in variables:
+            for i in conjuntoFactores:
+                if i.identificador == j:
+                    newVar.append(i)
+
+        vecinos_dict = {var: 0 for var in newVar}
         
         for factor in conjuntoFactores:
-            for var in variables:
-                if var in factor.variables:
-                    vecinos_dict[var] = vecinos_dict[var] + 1
+            for var in newVar:
+                if var.identificador in factor.dependencias:
+                    # Suma 1 al valor de la llave var en vecinos_dict
+                    vecinos_dict[var] += 1
+
+
+        # Ordena vecinos_dict de menor a mayor en función del valor de sus llaves
+        vecinos_dict = dict(sorted(vecinos_dict.items(), key=lambda item: item[1]))
+
+        return list(vecinos_dict.keys())
 
     def buscaDependencias(self, factor):
         dependencias = []
