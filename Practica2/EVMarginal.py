@@ -13,7 +13,7 @@ def marginal(factores, variables):
             return tau
         
         variableEliminar = variables.pop(0)
-        print("Variable a eliminar: " + variableEliminar)
+        #print("Variable a eliminar: " + variableEliminar)
         factores_eliminar = []
 
         #print("Factores: " + str(factores))
@@ -25,7 +25,7 @@ def marginal(factores, variables):
         if factores_eliminar == []:
             return tau
 
-        print("####################################################")
+        #print("####################################################")
 
         # Nueva lista excluyendo los elementos de lista_a_eliminar
         nuevo_factores = [f for f in factores if f not in factores_eliminar]

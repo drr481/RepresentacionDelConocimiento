@@ -18,17 +18,23 @@ class EVCondicional:
         variablesAEliminar = []
 
         # Elimina las hojas
-        #self.eliminaHojas(conjuntoFactores)
+        self.eliminaHojas(conjuntoFactores)
         #print("Conjunto de factores después de eliminar hojas:")
         #for i in conjuntoFactores:
-        #    i.imprimir()            
+        #    print("Factor: " + i.identificador)         
 
         # Eliminar los valores de exp.B de conjuntoFactores en caso de sean valores explicitos en vez de variables
         for factor in conjuntoFactores:
             for i in self.exp.B:
                 if i in factor.valores_variablesdep:
+                    print(i)
                     f.eliminadependencias(factor, i)
                     self.exp.B.remove(i)
+
+        print("Conjunto de factores después de eliminar valores fijos:")
+        for i in conjuntoFactores:
+            i.imprimir()         
+
 
         # Ordenar las variables a eliminar
         variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores)
@@ -41,7 +47,7 @@ class EVCondicional:
         #print("Denominador => ")
         denominador = EVMarginal.marginal(numerador, self.exp.A)
         #print(denominador)
-
+        print("Solucion: ")
         return self.divideFactores(numerador, denominador)
     
     def eliminaHojas(self, conjuntoFactores):
@@ -49,22 +55,18 @@ class EVCondicional:
         return self.eliminaHojasRecursivo(conjuntoFactores, lista, conjuntoFactores[0])
 
     def eliminaHojasRecursivo(self, conjuntoFactores, lista, nodo):
-            
-        lista.append(nodo)
-    
-        for i in self.buscaHijos(nodo):
-            if i not in lista:
-                self.eliminaHojasRecursivo(conjuntoFactores, lista, i)
-            
-        if self.esHoja(nodo, conjuntoFactores):
-            conjuntoFactores.remove(nodo)
+        
+        for i in conjuntoFactores:
+            if self.esHoja(i, conjuntoFactores):
+                conjuntoFactores.remove(i)
 
     def esHoja(self, nodo, conjuntoFactores):
 
-        bool = False
+        bool = True
         for i in conjuntoFactores:
-            if nodo.identificador not in i.dependencias and nodo.identificador not in self.exp.B:
-                bool =  True
+            if nodo.identificador in i.dependencias or nodo.identificador in self.exp.B or nodo.identificador in self.exp.A:
+                bool =  False
+
         return bool
         
 

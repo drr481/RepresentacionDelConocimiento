@@ -108,5 +108,13 @@ def main():
     #for factor in ev_condicional.factores:
     #    print(factor)
 
+def prueba():
+    list = ('1','2','3')
+    
+    if '1' in list:
+        print("Se puede")
+    else:
+        print("No se puede")
+
 if __name__ == "__main__":
     main()
