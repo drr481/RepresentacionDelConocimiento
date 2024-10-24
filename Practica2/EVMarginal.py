@@ -13,12 +13,12 @@ def marginal(factores, variables):
             return tau
         
         variableEliminar = variables.pop(0)
-       
+        print("Variable a eliminar: " + variableEliminar)
         factores_eliminar = []
 
         #print("Factores: " + str(factores))
         for f in factores:
-            print(f)
+            #print(f)
             if variableEliminar in f.dependencias:
                 factores_eliminar.append(f)
    

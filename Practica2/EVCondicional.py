@@ -34,8 +34,9 @@ class EVCondicional:
         variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores)
 
         var_aux = [var.identificador for var in variablesAEliminar]
+        print("Numerador =>  ")
         numerador = [EVMarginal.marginal(conjuntoFactores, var_aux)]
-        #print("Numerador =>  ")
+        
         print("Denominador => ")
         denominador = EVMarginal.marginal(numerador, self.exp.A)
 
@@ -67,6 +68,7 @@ class EVCondicional:
 
     def ordenaVariables(self, variables, conjuntoFactores):
         if self.esArbol(conjuntoFactores):
+            print("Posorden")
             return self.posorden(variables, conjuntoFactores)
         else:
             return self.minimosVecinos(variables, conjuntoFactores)
@@ -97,14 +99,10 @@ class EVCondicional:
         return self.posordenRecursivo(variables, conjuntoFactores, listaExplorados, conjuntoFactores[0])
 
     def posordenRecursivo(self, variables, conjuntoFactores, listaExplorados, nodo):
-            
-        nodoDependencias = []
-        for i in conjuntoFactores:
-            if i.identificador in nodo.dependencias:
-                nodoDependencias.append(i)
 
-        for i in nodoDependencias:
-            self.posordenRecursivo(variables, conjuntoFactores, listaExplorados, i)
+        for i in self.buscaDependencias(nodo):
+            if i.identificador in variables:
+                self.posordenRecursivo(variables, conjuntoFactores, listaExplorados, i)
         
         listaExplorados.append(nodo)
 
