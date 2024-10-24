@@ -13,26 +13,30 @@ class EVCondicional:
 
     def eliminaVariablesCondicional(self, A, B, variables, conjuntoFactores):
 
-        exp = Expresion(A, B)
+        self.exp = Expresion(A, B)
 
         variablesAEliminar = []
 
         # Elimina las hojas
-        self.eliminaHojas(conjuntoFactores)
+        #self.eliminaHojas(conjuntoFactores)
+        #print("Conjunto de factores después de eliminar hojas:")
+        #for i in conjuntoFactores:
+        #    i.imprimir()            
 
         # Eliminar los valores de exp.B de conjuntoFactores en caso de sean valores explicitos en vez de variables
         for factor in conjuntoFactores:
-            for i in exp.B:
+            for i in self.exp.B:
                 if i in factor.valores_variablesdep:
                     f.eliminadependencias(factor, i)
-                    exp.B.remove(i)
+                    self.exp.B.remove(i)
 
         # Ordenar las variables a eliminar
         variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores)
 
-        numerador = EVMarginal.marginal(conjuntoFactores, variablesAEliminar)
+        var_aux = [var.identificador for var in variablesAEliminar]
+        numerador = EVMarginal.marginal(conjuntoFactores, var_aux)
 
-        denominador = EVMarginal.marginal(numerador, exp.A)
+        denominador = EVMarginal.marginal(numerador, self.exp.A)
 
         return numerador / denominador
     
@@ -44,7 +48,7 @@ class EVCondicional:
             
         lista.append(nodo)
     
-        for i in self.buscaDependencias(nodo):
+        for i in self.buscaHijos(nodo):
             if i not in lista:
                 self.eliminaHojasRecursivo(conjuntoFactores, lista, i)
             
@@ -52,10 +56,12 @@ class EVCondicional:
             conjuntoFactores.remove(nodo)
 
     def esHoja(self, nodo, conjuntoFactores):
+
+        bool = False
         for i in conjuntoFactores:
-            if nodo.identificador in i.dependencias:
-                return False
-        return True
+            if nodo.identificador not in i.dependencias and nodo.identificador not in self.exp.B:
+                bool =  True
+        return bool
         
 
     def ordenaVariables(self, variables, conjuntoFactores):
@@ -91,7 +97,12 @@ class EVCondicional:
 
     def posordenRecursivo(self, variables, conjuntoFactores, listaExplorados, nodo):
             
-        for i in nodo.vecinos:
+        nodoDependencias = []
+        for i in conjuntoFactores:
+            if i.identificador in nodo.dependencias:
+                nodoDependencias.append(i)
+
+        for i in nodoDependencias:
             self.posordenRecursivo(variables, conjuntoFactores, listaExplorados, i)
         
         listaExplorados.append(nodo)
@@ -129,3 +140,11 @@ class EVCondicional:
 
         return dependencias
 
+    def buscaHijos(self, factor):
+
+        hijos = []
+        for i in self.conjuntoFactores:
+            if factor.identificador in i.dependencias:
+                hijos.append(i)
+        
+        return hijos

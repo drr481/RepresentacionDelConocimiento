@@ -76,12 +76,12 @@ def main():
     }
 
     # Crea los factores de 'a' a 'f'
-    a = fac.Factor('a', [], prob_a, propios=['a0', 'a1'], dependencias=['a'])
-    b = fac.Factor('b', [], prob_b, propios=['b0', 'b1', 'b2'], dependencias=['b'])
-    c = fac.Factor('c', ['a0', 'a1'], prob_c_a, propios=['c0', 'c1'], dependencias=['c', 'a'])
-    d = fac.Factor('d', ['a0', 'a1', 'b0', 'b1', 'b2'], prob_d_a_b, propios=['d0', 'd1', 'd2'], dependencias=['d', 'a', 'b'])
-    e = fac.Factor('e', ['b0', 'b1', 'b2'], prob_e_b, propios=['e0', 'e1'], dependencias=['e', 'b'])
-    f = fac.Factor('f', ['c0', 'c1', 'd0', 'd1', 'd2'], prob_f_c_d, propios=['f0', 'f1', 'f2'], dependencias=['f', 'c', 'd'])
+    a = fac.Factor('a', [], prob_a, propios=['a0', 'a1'], dependencias=[])
+    b = fac.Factor('b', [], prob_b, propios=['b0', 'b1', 'b2'], dependencias=[])
+    c = fac.Factor('c', ['a0', 'a1'], prob_c_a, propios=['c0', 'c1'], dependencias=['a'])
+    d = fac.Factor('d', ['a0', 'a1', 'b0', 'b1', 'b2'], prob_d_a_b, propios=['d0', 'd1', 'd2'], dependencias=['a', 'b'])
+    e = fac.Factor('e', ['b0', 'b1', 'b2'], prob_e_b, propios=['e0', 'e1'], dependencias=['b'])
+    f = fac.Factor('f', ['c0', 'c1', 'd0', 'd1', 'd2'], prob_f_c_d, propios=['f0', 'f1', 'f2'], dependencias=['c', 'd'])
 
     # Crear el conjunto de factores
     factores = [a, b, c, d, e, f]
@@ -97,14 +97,14 @@ def main():
     variables_a_eliminar = ['a', 'c']
     
     # Llamar al método eliminaVariablesCondicional
-    #ev_condicional.eliminaVariablesCondicional(A, B, variables_a_eliminar, factores)
-    print("###########################################################################")
-    print(factores[2])
+    ev_condicional.eliminaVariablesCondicional(A, B, variables_a_eliminar, factores)
+    #print("###########################################################################")
+    #print(factores[2])
 
     # Imprimir el resultado para verificar
     print("Factores después de eliminar variables condicionales:")
-    #for factor in ev_condicional.factores:
-    #    print(factor)
+    for factor in ev_condicional.factores:
+        print(factor)
 
 if __name__ == "__main__":
     main()

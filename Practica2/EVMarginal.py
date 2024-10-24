@@ -7,18 +7,17 @@ def marginal(factores, variables):
     
     
 
-    def marginalrecursivo(factores, variables, probabilidad):
+    def marginalrecursivo(factores, variables, tau):
 
         if variables == []:
-            return probabilidad
+            return tau
         
         variableEliminar = variables.pop(0)
-         
        
         factores_eliminar = []
-      
+
+        print("Factores: " + str(factores))
         for f in factores:
-    
             if variableEliminar in f.dependencias:
                 factores_eliminar.append(f)
                 
@@ -132,7 +131,7 @@ letras = ['c', 'e', 'd', 'a']
 lista_permutaciones = [list(p) for p in itertools.permutations(letras)]
 
 probabilidad_b = marginal(factores, lista_permutaciones[2])
-print(probabilidad_b)
+#print(probabilidad_b)
 
 
 

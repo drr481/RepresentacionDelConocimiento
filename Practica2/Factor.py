@@ -39,8 +39,8 @@ def eliminacion(factores_marginalizados, variable_a_eliminar):
     factores_marginalizados.dependencias.remove(variable_a_eliminar) # Eliminar la variable de las dependencias del factor marginalizado
 
     nuevos_valores = {}
-    print("Eliminacion de la variable:",variable_a_eliminar)
-    print(f"factor.values: {factores_marginalizados.valores}")
+    #print("Eliminacion de la variable:",variable_a_eliminar)
+    #print(f"factor.values: {factores_marginalizados.valores}")
 
     for llave, valor in factores_marginalizados.valores.items():
         # Filtrar los elementos de la tupla que no contengan 'verde'
@@ -65,8 +65,8 @@ def eliminacion(factores_marginalizados, variable_a_eliminar):
     
     nuevo_factor = Factor(factores_marginalizados.identificador,None, nuevos_valores, factores_marginalizados.propios, factores_marginalizados.dependencias)
     
-    print(f"Factor resultante tras la eliminación de la variable {variable_a_eliminar}:")
-    nuevo_factor.imprimir()
+    #print(f"Factor resultante tras la eliminación de la variable {variable_a_eliminar}:")
+    #nuevo_factor.imprimir()
     
     return nuevo_factor
 
@@ -77,9 +77,9 @@ def producto_de_factores(factor1, factor2):
     para ajustar las probabilidades condicionales. Los valores resultantes se multiplican
     cuando coinciden las variables en común.
     """
-    print(f"Producto de los factores del nodo {factor1.identificador} y nodo {factor2.identificador}:")
-    print(f"factor1: {factor1.valores}")
-    print(f"factor2: {factor2.valores}")
+    #print(f"Producto de los factores del nodo {factor1.identificador} y nodo {factor2.identificador}:")
+    #print(f"factor1: {factor1.valores}")
+    #print(f"factor2: {factor2.valores}")
     
     if factor1.dependencias == [] or factor2.dependencias == []:
         raise ValueError("No hay variables de dependencia en los factores para realizar el producto.")
@@ -97,20 +97,20 @@ def producto_de_factores(factor1, factor2):
     nuevos_valores = producto_factores(factor1.valores, factor2.valores)
 
     
-    print(f"nuevos_valores: {nuevos_valores}")
+    #print(f"nuevos_valores: {nuevos_valores}")
 
-    print(f"factor2.valores: {factor2.valores}")
+    #print(f"factor2.valores: {factor2.valores}")
    
     #print(f"nuevas_variables: {nuevas_variables}")
-    print(f"factor1.dependencias: {factor1.dependencias}")
-    print(f"factor2.dependencias: {factor2.dependencias}")
-    print(f"variables_comunes: {variables_comunes}")
+    #print(f"factor1.dependencias: {factor1.dependencias}")
+    #print(f"factor2.dependencias: {factor2.dependencias}")
+    #print(f"variables_comunes: {variables_comunes}")
     
   
     
     nuevo_factor = Factor(factor1.identificador + "-" + factor2.identificador, None, nuevos_valores, [], list(set(factor1.dependencias + factor2.dependencias)))
-    print(f"Producto de los factores del nodo {factor1.identificador} y nodo {factor2.identificador}:")
-    nuevo_factor.imprimir()
+    #print(f"Producto de los factores del nodo {factor1.identificador} y nodo {factor2.identificador}:")
+    #nuevo_factor.imprimir()
 
     return nuevo_factor
 
@@ -166,7 +166,7 @@ def marginalizacion(lista_factores, variable_a_marginar):
     y sumar los valores correspondientes en la matriz. 
     """
     
-    print(f"Marginalización de la variable {variable_a_marginar} en los factores:")
+    #print(f"Marginalización de la variable {variable_a_marginar} en los factores:")
 
     if len(lista_factores) == 0:
         raise ValueError("No hay factores para realizar la marginalización.")
@@ -189,11 +189,11 @@ def marginalizacion(lista_factores, variable_a_marginar):
             nuevo_factor = producto_de_factores(nuevo_factor, factor)
 
                     
-    nuevo_factor.imprimir()
+    #nuevo_factor.imprimir()
     return nuevo_factor
 
 def eliminadependencias(factor, variable):
-   for llave in factor.valores.keys():
+   for llave in list(factor.valores.keys()):
        if variable not in llave:
            factor.valores.pop(llave)
 
@@ -293,7 +293,7 @@ if __name__ == "__main__":
 
     #Eliminación de la variable C
     f_c_eliminacion= eliminacion(f_c_marginalizado, lista_variables[0])
-    print(f"Factor resultante tras la eliminación de la variable (1 iter) {f_c_eliminacion}:")
+    #print(f"Factor resultante tras la eliminación de la variable (1 iter) {f_c_eliminacion}:")
 
 
     '''Segunda iteración'''
@@ -304,12 +304,12 @@ if __name__ == "__main__":
     #Marginalización de la variable E
     
     f_a_e_c_resultante = marginalizacion(factores, lista_variables[1])
-    print(f"Factor resultante tras el segundo produto de la variable (2 iter) {f_a_e_c_resultante}:")
+    #print(f"Factor resultante tras el segundo produto de la variable (2 iter) {f_a_e_c_resultante}:")
 
     
     #Eliminación de la variable E
     f_a_e_c_eliminacion= eliminacion(f_a_e_c_resultante, lista_variables[1])
-    print ("Eliminacion paso 2 variables:",f_a_e_c_eliminacion)
+    #print ("Eliminacion paso 2 variables:",f_a_e_c_eliminacion)
     
     
     '''Tercera iteración'''
@@ -319,11 +319,11 @@ if __name__ == "__main__":
 
     #Marginalización de la variable D
     f_a_e_c_d_producto = marginalizacion(factores, lista_variables[2])
-    print(f"Factor resultante tras el producto de la variable (3 iter) {f_a_e_c_d_producto}:")
+    #print(f"Factor resultante tras el producto de la variable (3 iter) {f_a_e_c_d_producto}:")
 
     #Eliminación de la variable D
     f_a_e_c_d_eliminacion = eliminacion(f_a_e_c_d_producto, lista_variables[2])
-    print(f"Factor resultante tras la eliminación de la variable (3 iter) {f_a_e_c_d_eliminacion}:")
+    #print(f"Factor resultante tras la eliminación de la variable (3 iter) {f_a_e_c_d_eliminacion}:")
 
     '''Cuarta iteración'''
 
@@ -332,11 +332,11 @@ if __name__ == "__main__":
     lista_variables1 = ['c','e','d','a']
 
     f_a_e_c_d_b_producto =  marginalizacion(factores, lista_variables[3])
-    print(f"Factor resultante tras el producto de la variable (4 iter) {f_a_e_c_d_b_producto}:")
+    #print(f"Factor resultante tras el producto de la variable (4 iter) {f_a_e_c_d_b_producto}:")
 
     #Eliminación de la variable A
     f_a_e_c_d_b_eliminacion = eliminacion(f_a_e_c_d_b_producto, lista_variables[3])
-    print(f"Factor resultante tras la eliminación de la variable (4 iter) {f_a_e_c_d_b_eliminacion}:")
+    #print(f"Factor resultante tras la eliminación de la variable (4 iter) {f_a_e_c_d_b_eliminacion}:")
     
     
     
