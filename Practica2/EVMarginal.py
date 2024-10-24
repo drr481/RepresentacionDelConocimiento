@@ -22,6 +22,9 @@ def marginal(factores, variables):
             if variableEliminar in f.dependencias:
                 factores_eliminar.append(f)
    
+        if factores_eliminar == []:
+            return tau
+
         print("####################################################")
 
         # Nueva lista excluyendo los elementos de lista_a_eliminar
@@ -132,7 +135,7 @@ letras = ['c', 'e', 'd', 'a']
 # Genera todas las permutaciones posibles y almacenarlas en una lista
 lista_permutaciones = [list(p) for p in itertools.permutations(letras)]
 
-probabilidad_b = marginal(factores, lista_permutaciones[2])
+#probabilidad_b = marginal(factores, lista_permutaciones[2])
 #print(probabilidad_b)
 
 

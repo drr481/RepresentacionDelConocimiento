@@ -99,14 +99,14 @@ def main():
     variables_a_eliminar = ['a', 'c']
     
     # Llamar al método eliminaVariablesCondicional
-    ev_condicional.eliminaVariablesCondicional(A, B, variables_a_eliminar, factores)
+    ev_condicional.eliminaVariablesCondicional(A, B, variables_a_eliminar, factores)[0].imprimir()
     #print("###########################################################################")
     #print(factores[2])
 
     # Imprimir el resultado para verificar
-    print("Factores después de eliminar variables condicionales:")
-    for factor in ev_condicional.factores:
-        print(factor)
+    #print("Factores después de eliminar variables condicionales:")
+    #for factor in ev_condicional.factores:
+    #    print(factor)
 
 if __name__ == "__main__":
     main()

@@ -34,13 +34,15 @@ class EVCondicional:
         variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores)
 
         var_aux = [var.identificador for var in variablesAEliminar]
-        print("Numerador =>  ")
+        #print("Numerador =>  ")
         numerador = [EVMarginal.marginal(conjuntoFactores, var_aux)]
-        
-        print("Denominador => ")
-        denominador = EVMarginal.marginal(numerador, self.exp.A)
+        #print(numerador[0])
 
-        return numerador / denominador
+        #print("Denominador => ")
+        denominador = EVMarginal.marginal(numerador, self.exp.A)
+        #print(denominador)
+
+        return self.divideFactores(numerador, denominador)
     
     def eliminaHojas(self, conjuntoFactores):
         lista = []
@@ -68,7 +70,7 @@ class EVCondicional:
 
     def ordenaVariables(self, variables, conjuntoFactores):
         if self.esArbol(conjuntoFactores):
-            print("Posorden")
+            #print("Posorden")
             return self.posorden(variables, conjuntoFactores)
         else:
             return self.minimosVecinos(variables, conjuntoFactores)
@@ -147,3 +149,15 @@ class EVCondicional:
                 hijos.append(i)
         
         return hijos
+
+    def divideFactores(self, numerador, denominador):
+        
+        if denominador == []:
+            return numerador
+        
+        if isinstance(denominador, (int, float)):
+            for factor in numerador:
+                for val in factor.valores:
+                    factor.valores[val] /= denominador
+        
+        return numerador
