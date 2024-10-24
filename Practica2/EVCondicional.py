@@ -34,8 +34,9 @@ class EVCondicional:
         variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores)
 
         var_aux = [var.identificador for var in variablesAEliminar]
-        numerador = EVMarginal.marginal(conjuntoFactores, var_aux)
-
+        numerador = [EVMarginal.marginal(conjuntoFactores, var_aux)]
+        #print("Numerador =>  ")
+        print("Denominador => ")
         denominador = EVMarginal.marginal(numerador, self.exp.A)
 
         return numerador / denominador

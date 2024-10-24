@@ -16,12 +16,14 @@ def marginal(factores, variables):
        
         factores_eliminar = []
 
-        print("Factores: " + str(factores))
+        #print("Factores: " + str(factores))
         for f in factores:
+            print(f)
             if variableEliminar in f.dependencias:
                 factores_eliminar.append(f)
-                
-        
+   
+        print("####################################################")
+
         # Nueva lista excluyendo los elementos de lista_a_eliminar
         nuevo_factores = [f for f in factores if f not in factores_eliminar]
 

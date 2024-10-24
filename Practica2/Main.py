@@ -5,6 +5,8 @@ import EVCondicional as evc
 
 def main():
 
+    # Ejercicio 2.3 de teoria
+
     # Crea las tablas de probabilidad
     prob_a = {
         ('a0'): 0.6,
