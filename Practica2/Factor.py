@@ -191,12 +191,27 @@ def marginalizacion(lista_factores, variable_a_marginar):
                     
     #nuevo_factor.imprimir()
     return nuevo_factor
-
+'''
 def eliminadependencias(factor, variable):
    for llave in list(factor.valores.keys()):
        if variable not in llave:
            factor.valores.pop(llave)
+'''
+def eliminadependencias(factor, variables):
+   
+    # Creamos un nuevo diccionario filtrado
+    factor.valores = {llave: valor for llave, valor in factor.valores.items() 
+                            if all(valor in llave for valor in variables)}
+    
+    print(f"Diccionario filtrado: {factor.valores}")
 
+
+    # Crear un nuevo diccionario eliminando los valores de la búsqueda en las llaves
+    factor.valores = {el[0] if len(el) == 1 else tuple(el): valor 
+                         for llave, valor in factor.valores.items()
+                         for el in [tuple(item for item in llave if item not in variables)]}
+    
+    print(f"Diccionario filtrado: {factor.valores}")
 
 def getIdentificador(factor):
     """

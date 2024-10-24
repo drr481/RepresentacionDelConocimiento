@@ -10,7 +10,7 @@ class EVCondicional:
 
     def __init__(self, conjuntoFactores):
         self.conjuntoFactores = conjuntoFactores
-
+    '''
     def eliminaVariablesCondicional(self, A, B, variables, conjuntoFactores):
 
         self.exp = Expresion(A, B)
@@ -49,7 +49,51 @@ class EVCondicional:
         #print(denominador)
         print("Solucion: ")
         return self.divideFactores(numerador, denominador)
-    
+    '''
+
+    def eliminaVariablesCondicional(self, A, B,variables, conjuntoFactores):
+
+        self.exp = Expresion(A, B)
+
+        variablesAEliminar = []
+        variablesElim = variables
+
+        # Elimina las hojas
+        self.eliminaHojas(conjuntoFactores)
+        #print("Conjunto de factores después de eliminar hojas:")
+        #for i in conjuntoFactores:
+        #    print("Factor: " + i.identificador)        
+       
+
+        # Eliminar los valores de exp.B de conjuntoFactores en caso de sean valores explicitos en vez de variables
+        for factor in conjuntoFactores:
+            for variableElim in variablesElim:
+
+                #Compruebo si la variable a eliminar esta en alguna dependencia de un factor y si todos los elementos de self.exp.B estan en los propios o en los valores de las variables dependientes
+                if  variableElim in factor.dependencias and  all(any(elemento in lista for lista in [factor.propios, factor.valores_variablesdep]) for elemento in self.exp.B):
+                
+                    f.eliminadependencias(factor, self.exp.B)
+                
+
+        print("Conjunto de factores después de eliminar valores fijos:")
+        for i in conjuntoFactores:
+            i.imprimir()         
+
+
+        # Ordenar las variables a eliminar
+        variablesAEliminar = self.ordenaVariables(variables, conjuntoFactores)
+
+        var_aux = [var.identificador for var in variablesAEliminar]
+        print("Numerador =>  ")
+        numerador = [EVMarginal.marginal(conjuntoFactores, var_aux)]
+        print(numerador[0])
+
+        print("Denominador => ")
+        denominador = EVMarginal.marginal(numerador, self.exp.A)
+        print(denominador)
+        print("Solucion: ")
+        return self.divideFactores(numerador, denominador)
+
     def eliminaHojas(self, conjuntoFactores):
         lista = []
         return self.eliminaHojasRecursivo(conjuntoFactores, lista, conjuntoFactores[0])
