@@ -58,7 +58,7 @@ def eliminacion(factores_marginalizados, variable_a_eliminar):
             nuevos_valores[nueva_llave] = valor
         
    # Redondear los valores
-    nuevos_valores = {k: round(v, 6) for k, v in nuevos_valores.items()} 
+    nuevos_valores = {k: round(v, 2) for k, v in nuevos_valores.items()} 
     
 
 
