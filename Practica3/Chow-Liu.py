@@ -32,10 +32,12 @@ def algoritmo1(distribucion_probabilidad):
     #Creo un grafo completo que estará compuesto por las aristas que son las llaves del diccionario de la informacion mutua con un determinado peso
     grafo_completo = nx.Graph()
 
-    #variables = [variable.upper() for variable in variables]
-    print(f"Variables: {variables}")
+
+    variables = [variable.upper() for variable in variables]
+    #print(f"Variables: {variables}")
 
     for variable in variables:
+        print(f"Variable: {variable}")
         grafo_completo.add_node(variable)
 
     for llave, valor in informacion_mutua.items():
@@ -181,7 +183,7 @@ def denominador(variables_nuevas, lista_tablas_distribucion, nueva_lista_combina
                         #denominador1[llave] = valor
                         #print(f"Denominador: {denominador1}")
                 if isinstance(llave, str):  
-                        if llave[0][0] == variable[0] :
+                        if llave[0][0] == variable :
                             
                             denominador1[llave] = valor
                         #print(f"Denominador: {denominador1}")
