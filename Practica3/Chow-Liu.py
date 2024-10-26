@@ -5,7 +5,22 @@ from matplotlib import pyplot as plt
 import networkx as nx
 from numpy import split
 
-def algoritmo1(distribucion_probabilidad):
+
+def ChowLiu(distribucion_probabilidad):
+    
+
+    #Paso 1: Encuentra el grafo completo tras calcular la informacion mutua que contiene las aristas con un determinado peso
+    grafoPaso1 = Paso1ChowLiu(distribucion_probabilidad)
+    #print(f"Grafo: {grafoPaso1[0]}\n Informacion mutua: {grafoPaso1[1]}")
+    
+    #Paso 2:Encuentra el arbol de recubrimiento maximo
+    arbol_recubrimiento_maximo = Paso2ChowLiu(grafoPaso1[0], grafoPaso1[1])
+  
+    #Paso 3: Convierte el arbol de recubrimiento maximo en un arbol que tenga un nodo raiz y que es dirigido y muestra el arbol
+    Paso3ChowLiu('C', arbol_recubrimiento_maximo)
+
+
+def Paso1ChowLiu (distribucion_probabilidad):
 
     informacion_mutua = {}
     lista_tablas_distribucion = []
@@ -57,7 +72,124 @@ def algoritmo1(distribucion_probabilidad):
        
     return grafo_completo, informacion_mutua
 
+def Paso2ChowLiu (grafo_completo, informacion_mutua):
 
+    
+    lista_pesos_ordenados = []
+    lista_nodos = []
+    lista_aristas = []
+    arbol_recubrimiento_maximo = nx.Graph()
+
+    for aristas in grafo_completo.edges.data('weight'):
+        print(type(aristas))
+        for peso in aristas:
+            if isinstance(peso, float):
+                print(f"Pesos de las aristas: {peso}")
+                lista_pesos_ordenados.append(peso)
+    
+    #Ordenar los pesos de las aristas de mayor a menor
+    lista_pesos_ordenados = sorted(lista_pesos_ordenados, reverse=True)
+    
+    print(f"Lista de pesos ordenados: {lista_pesos_ordenados}")
+    
+
+
+    for arista,peso in informacion_mutua.items():
+
+        if arista[0] not in lista_nodos:
+            lista_nodos.append(arista[0])
+            lista_aristas.append(arista)
+        
+        if arista[1] not in lista_nodos:
+            lista_nodos.append(arista[1])
+            lista_aristas.append(arista)
+        
+        if len(lista_nodos) == 0:
+            break
+
+    #Eliminar las aristas duplicadas
+    lista_aristas = list(set(lista_aristas))
+
+    #print(f"Lista de nodos: {lista_nodos}")
+    #print(f"Lista de aristas: {lista_aristas}")
+    
+    #Creo el arbol de expansion minima
+    for vertice in lista_nodos:
+    
+        arbol_recubrimiento_maximo.add_node(vertice)
+    
+    for arista in lista_aristas:
+        arbol_recubrimiento_maximo.add_edge(arista[0], arista[1], weight=informacion_mutua[arista])
+    
+    return arbol_recubrimiento_maximo
+    #Dibujar el grafo
+    #pos = nx.spring_layout(arbol_recubrimiento_maximo)
+    #nx.draw(arbol_recubrimiento_maximo, pos, with_labels=True, node_color='skyblue', node_size=2500, font_size=10, font_color='black', font_weight='bold')
+    #labels = nx.get_edge_attributes(arbol_recubrimiento_maximo, 'weight')
+    #nx.draw_networkx_edge_labels(arbol_recubrimiento_maximo, pos, edge_labels=labels)
+    #plt.show()
+     
+    #Ordena el mapa con los pesos de las aristas de mayor a menor
+    #informacion_mutua = dict(sorted(informacion_mutua.items(), key=lambda item: item[1], reverse=True))
+    #print(f"Mapa de informacion mutua ordenado: {informacion_mutua}")
+
+    #Se puede usar el algoritmo de Prim o Kruskal para obtener el arbol de expansion minima
+    #Podemos implementar esto desde 0
+    #arbol_expansion_minima = nx.maximum_spanning_tree(grafo_completo, algorithm= 'prim', weight='weight')
+    #print(f"Arbol de expansion minima: {arbol_expansion_minima.edges}")
+
+    
+
+def Paso3ChowLiu (raiz, arbol_recubrimiento_maximo):
+
+    
+    lista_aristas = AsignaDependencias(raiz, arbol_recubrimiento_maximo, [])
+
+    print(f"Lista de aristas: {lista_aristas}")
+    arbol_raiz = nx.DiGraph()
+
+    for arista in lista_aristas:
+        
+        arbol_raiz.add_edge(arista[0], arista[1])
+    
+    pos = nx.spring_layout(arbol_raiz)
+    nx.draw(arbol_raiz, pos, with_labels=True, node_color='skyblue', node_size=2500, font_size=10, font_color='black', font_weight='bold')
+    plt.show()
+
+    return arbol_raiz
+
+    
+
+def AsignaDependencias (raiz, arbol_recubrimiento_maximo, lista):
+    
+    
+    lista = []
+
+    return  AsignaDependenciasRec(raiz, arbol_recubrimiento_maximo, lista)
+    
+def AsignaDependenciasRec (raiz, arbol_recubrimiento_maximo, lista):
+
+   
+    
+    
+    #print(f"len(arbol_recubrimiento_maximo.neighbors()): {len(list(arbol_recubrimiento_maximo.neighbors(raiz)))}")
+    #print(f"Lista: {lista}")
+   
+    if len(list(arbol_recubrimiento_maximo.neighbors(raiz))) == 0:
+        
+        return lista
+
+    for i in list(set(arbol_recubrimiento_maximo.neighbors(raiz))):
+        tupla = (raiz, i)
+        #print(f"Arista: {tupla}")
+        lista.append(tupla)
+        arbol_recubrimiento_maximo.remove_edge(raiz, i)
+        AsignaDependenciasRec(i, arbol_recubrimiento_maximo, lista)
+
+    return lista
+    
+
+     
 
 def calcular_informacion_mutua(lista_combinaciones_num, lista_tablas_distribucion, nueva_lista_combinaciones, variables):
    
@@ -262,13 +394,10 @@ if __name__ == "__main__":
         ('a^1','b^1','c^0'): 0.14,
         ('a^1','b^1','c^1'): 0.21
     }
+
+    ChowLiu(distribucion_probabilidad)
   
 
-    algoritmoPaso1 = algoritmo1(distribucion_probabilidad)
-    print(f"Grafo: {algoritmoPaso1[0]}\n Informacion mutua: {algoritmoPaso1[1]}")
-   
-    
-    
 
     
 
