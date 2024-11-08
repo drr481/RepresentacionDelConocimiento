@@ -18,10 +18,13 @@ def ChowLiu(distribucion_probabilidad):
     #Paso 2:Encuentra el arbol de recubrimiento maximo
     arbol_recubrimiento_maximo = Paso2ChowLiu(grafoPaso1[0], grafoPaso1[1])
   
-    #Paso 3: Convierte el arbol de recubrimiento maximo en un arbol que tenga un nodo raiz y que es dirigido y muestra el arbol
-    
-    variable = random.choice(extraer_variables(informacion_mutua))
-    Paso3ChowLiu(variable, arbol_recubrimiento_maximo)
+    #Paso 3: Convierte el arbol de recubrimiento maximo en un arbol que tenga un nodo raiz  y que es dirigido y muestra el arbol
+    #Habrá tantos arboles como variables haya
+    lista_variables = extraer_variables(informacion_mutua)
+
+    for variable in lista_variables:
+         arbol_recubrimiento_maximo_nuevo  =  arbol_recubrimiento_maximo.copy()
+         Paso3ChowLiu(variable, arbol_recubrimiento_maximo_nuevo)
 
 
 def Paso1ChowLiu (distribucion_probabilidad):
