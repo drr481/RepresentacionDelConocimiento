@@ -1,9 +1,10 @@
 from dataclasses import astuple
 import itertools
 from math import log2
+import random
 from matplotlib import pyplot as plt
 import networkx as nx
-from numpy import split
+
 
 
 def ChowLiu(distribucion_probabilidad):
@@ -12,12 +13,18 @@ def ChowLiu(distribucion_probabilidad):
     #Paso 1: Encuentra el grafo completo tras calcular la informacion mutua que contiene las aristas con un determinado peso
     grafoPaso1 = Paso1ChowLiu(distribucion_probabilidad)
     #print(f"Grafo: {grafoPaso1[0]}\n Informacion mutua: {grafoPaso1[1]}")
+    informacion_mutua = grafoPaso1[1]
     
     #Paso 2:Encuentra el arbol de recubrimiento maximo
     arbol_recubrimiento_maximo = Paso2ChowLiu(grafoPaso1[0], grafoPaso1[1])
   
-    #Paso 3: Convierte el arbol de recubrimiento maximo en un arbol que tenga un nodo raiz y que es dirigido y muestra el arbol
-    Paso3ChowLiu('C', arbol_recubrimiento_maximo)
+    #Paso 3: Convierte el arbol de recubrimiento maximo en un arbol que tenga un nodo raiz  y que es dirigido y muestra el arbol
+    #Habrá tantos arboles como variables haya
+    lista_variables = extraer_variables(informacion_mutua)
+
+    for variable in lista_variables:
+         arbol_recubrimiento_maximo_nuevo  =  arbol_recubrimiento_maximo.copy()
+         Paso3ChowLiu(variable, arbol_recubrimiento_maximo_nuevo)
 
 
 def Paso1ChowLiu (distribucion_probabilidad):
@@ -74,27 +81,40 @@ def Paso1ChowLiu (distribucion_probabilidad):
 
 def Paso2ChowLiu (grafo_completo, informacion_mutua):
 
-    
-    lista_pesos_ordenados = []
+
+    '''
+        
+        lista_pesos_ordenados = []
+        lista_nodos = []
+        lista_aristas = []
+        arbol_recubrimiento_maximo = nx.Graph()
+
+        for aristas in grafo_completo.edges.data('weight'):
+            print(type(aristas))
+            for peso in aristas:
+                if isinstance(peso, float):
+                    print(f"Pesos de las aristas: {peso}")
+                    lista_pesos_ordenados.append(peso)
+        
+        #Ordenar los pesos de las aristas de mayor a menor
+        lista_pesos_ordenados = sorted(lista_pesos_ordenados, reverse=True)
+        
+        print(f"Lista de pesos ordenados: {lista_pesos_ordenados}")
+        
+    '''
+
     lista_nodos = []
     lista_aristas = []
     arbol_recubrimiento_maximo = nx.Graph()
-
-    for aristas in grafo_completo.edges.data('weight'):
-        print(type(aristas))
-        for peso in aristas:
-            if isinstance(peso, float):
-                print(f"Pesos de las aristas: {peso}")
-                lista_pesos_ordenados.append(peso)
-    
-    #Ordenar los pesos de las aristas de mayor a menor
-    lista_pesos_ordenados = sorted(lista_pesos_ordenados, reverse=True)
-    
-    print(f"Lista de pesos ordenados: {lista_pesos_ordenados}")
+    lista_variables = extraer_variables(informacion_mutua)
+    print(f"Lista_variables Paso2: {lista_variables}")
+    informacion_mutua_nuevo = dict(sorted(informacion_mutua.items(), key= lambda peso:peso[0], reverse= True))
     
 
+        
 
-    for arista,peso in informacion_mutua.items():
+    for arista in informacion_mutua_nuevo.keys():
+        print(f"Arista pASO2: {arista}")
 
         if arista[0] not in lista_nodos:
             lista_nodos.append(arista[0])
@@ -104,16 +124,17 @@ def Paso2ChowLiu (grafo_completo, informacion_mutua):
             lista_nodos.append(arista[1])
             lista_aristas.append(arista)
         
-        if len(lista_nodos) == 0:
+        if lista_nodos == lista_variables:
             break
 
     #Eliminar las aristas duplicadas
-    lista_aristas = list(set(lista_aristas))
+    #lista_aristas = list(set(lista_aristas))
+    #print(f"Lista_Aristas sin duplicar:{lista_aristas}")
 
     #print(f"Lista de nodos: {lista_nodos}")
     #print(f"Lista de aristas: {lista_aristas}")
     
-    #Creo el arbol de expansion minima
+    #Creo el arbol de expansion maximo
     for vertice in lista_nodos:
     
         arbol_recubrimiento_maximo.add_node(vertice)
@@ -162,9 +183,6 @@ def Paso3ChowLiu (raiz, arbol_recubrimiento_maximo):
 
 def AsignaDependencias (raiz, arbol_recubrimiento_maximo, lista):
     
-    
-    lista = []
-
     return  AsignaDependenciasRec(raiz, arbol_recubrimiento_maximo, lista)
     
 def AsignaDependenciasRec (raiz, arbol_recubrimiento_maximo, lista):
@@ -380,10 +398,10 @@ def extraer_variables(distribucion_probabilidad):
 
     return variables
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
 
     
-
+    '''
     distribucion_probabilidad = {
         ('a^0','b^0','c^0'): 0.21,
         ('a^0','b^0','c^1'): 0.14,
@@ -396,7 +414,7 @@ if __name__ == "__main__":
     }
 
     ChowLiu(distribucion_probabilidad)
-  
+    '''
 
 
     
