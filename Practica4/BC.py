@@ -8,8 +8,11 @@ class BC:
         while True:
             bandera = False
             for regla in self.reglas:
-                if regla[1] in self.hechos and regla[2] in self.hechos and regla[3] not in self.hechos:
-                    self.hechos.append(regla[3])
+                if regla[0].evaluar() and (not hechos.contains(regla[1]) or not reglas.contains(regla[1])):
+                    if (regla[1].literal()):
+                        self.hechos.append(regla[1])
+                    else:
+                        self.reglas.append(regla[1])
                     bandera = True
             if not bandera:
                 break
@@ -26,6 +29,12 @@ class BC:
             self.operador = operador
             self.operando1 = operando1
             self.operando2 = operando2
+            self.valor = None
+            if (BC.hechos.contains(operando1)):
+                self.operando1 = True
+            if (BC.hechos.contains(operando2)):
+                self.operando2 = True
+            
         
         def operador(self):
             return self.operador
@@ -36,6 +45,9 @@ class BC:
         def operando2(self):
             return self.operando2
         
+        def literal(self):
+            return self.operando2 == None
+        
         def evaluar(self):
             if self.operador == 'and':
                 return self.evaluar(self.operando1) and self.evaluar(self.operando2)
@@ -45,6 +57,8 @@ class BC:
                 return not self.evaluar(self.operando1)
             elif self.operador == '=>':
                 return not self.evaluar(self.operando1) or self.evaluar(self.operando2)
+            elif self.operador == None:
+                return self.operando1
             else:
                 return False
     
