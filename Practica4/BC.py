@@ -5,11 +5,12 @@ class BC:
         self.reglas = reglas
 
     def encadenamientoAdelante(self):
+
         while True:
             bandera = False
             for regla in self.reglas:
-                if regla[0].evaluar() and (not hechos.contains(regla[1]) or not reglas.contains(regla[1])):
-                    if (regla[1].literal()):
+                if (regla in reglas and regla[0] in hechos) and not regla[1] in hechos:
+                    if (regla[1].isLiteral()):
                         self.hechos.append(regla[1])
                     else:
                         self.reglas.append(regla[1])
@@ -18,10 +19,10 @@ class BC:
                 break
         return self.hechos
     
-    def hechos(self):
+    def getHechos(self):
         return self.hechos 
     
-    def reglas(self):
+    def getReglas(self):
         return self.reglas
     
     class operacion:
@@ -29,23 +30,18 @@ class BC:
             self.operador = operador
             self.operando1 = operando1
             self.operando2 = operando2
-            self.valor = None
-            if (BC.hechos.contains(operando1)):
-                self.operando1 = True
-            if (BC.hechos.contains(operando2)):
-                self.operando2 = True
-            
+            self.valor = None            
         
-        def operador(self):
+        def getOperador(self):
             return self.operador
         
-        def operando1(self):
+        def getOperando1(self):
             return self.operando1
         
-        def operando2(self):
+        def getOperando2(self):
             return self.operando2
         
-        def literal(self):
+        def isLiteral(self):
             return self.operando2 == None
         
         def evaluar(self):
@@ -64,16 +60,26 @@ class BC:
     
 
 if __name__ == '__main__':
-    hechos = ['Ed', 'Ev', 'Es', 'A', 'C']
+
+    # Literales
+
+    Llueve = True
+    Mojado = True
+
+    # Hechos
+    
+    op1 = BC.operacion(None, Llueve, None)
+    
+    hechos = [op1]
+
+    # Reglas
+    
+    op3 = BC.operacion('=>', Llueve, Mojado)
+
     reglas = [
-        ['hola', 'Ed', 'A', 'P'],
-        ['Si', 'Ev', 'C', 'S'],
-        ['Si', 'Ed', 'P', 'S'],
-        ['Si', 'Es', 'P', 'S'],
-        ['Si', 'Ev', 'S', 'N'],
-        ['Si', 'Ed', 'S', 'P'],
-        ['Si', 'Ed', 'A', 'P', 'D']
+        op3
     ]
+
     bc = BC(hechos, reglas)
     print(bc.encadenamientoAdelante())
 
