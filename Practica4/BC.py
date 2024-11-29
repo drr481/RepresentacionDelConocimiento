@@ -1,3 +1,5 @@
+import copy
+
 class BC:
 
     def __init__(self, hechos, reglas):
@@ -5,18 +7,19 @@ class BC:
         self.reglas = reglas
 
     def encadenamientoAdelante(self):
-
+        print("Encadenameinto hacia adelante")
         while True:
             bandera = False
             for regla in self.reglas:
-                if (regla in reglas and regla[0] in hechos) and not regla[1] in hechos:
-                    if (regla[1].isLiteral()):
-                        self.hechos.append(regla[1])
-                    else:
-                        self.reglas.append(regla[1])
+                print(regla.getOperando1().evaluar())
+                if (regla.getOperador() == "=>") and ((regla.getOperando1() in hechos) and (not (regla.getOperando2() in hechos))):
+                    #print("Operando2: ", regla.getOperando2())
+                    self.hechos.append(regla.getOperando2())
+                    self.reglas.append(regla.getOperando2())
                     bandera = True
-            if not bandera:
+            if (bandera == True):
                 break
+        print("Salgo del ciclo")
         return self.hechos
     
     def getHechos(self):
@@ -54,32 +57,48 @@ class BC:
             elif self.operador == '=>':
                 return not self.evaluar(self.operando1) or self.evaluar(self.operando2)
             elif self.operador == None:
-                return self.operando1
+                return True
             else:
                 return False
+        
+        def __str__(self):
+            return "(" + str(self.operador) + ", " + str(self.operando1) + ", " + str(self.operando2) + ")"
     
 
 if __name__ == '__main__':
 
     # Literales
 
-    Llueve = True
-    Mojado = True
+    Llueve = "Llueve"
+    Mojado = "Mojado"
 
     # Hechos
     
-    op1 = BC.operacion(None, Llueve, None)
+    op1 = BC.operacion("not", Llueve, None)
+    op2 = BC.operacion(None, Mojado, None)
     
     hechos = [op1]
+    aux = copy.deepcopy(hechos)
+
+    print("Hechos:")
+    for i in aux:
+        print(i)
 
     # Reglas
     
-    op3 = BC.operacion('=>', Llueve, Mojado)
+    op3 = BC.operacion('=>', BC.operacion(None, Llueve, None), op2)
 
-    reglas = [
-        op3
-    ]
+    reglas = [op3]
 
-    bc = BC(hechos, reglas)
-    print(bc.encadenamientoAdelante())
+    print("Reglas:")
+    for i in reglas:
+        print(i)
+
+    bc = BC(aux, reglas)
+    bc.encadenamientoAdelante()
+    #print(type(bc.getHechos()))
+    print("Solución:")
+    for i in bc.getHechos():
+        if i not in hechos:
+            print(i)
 
