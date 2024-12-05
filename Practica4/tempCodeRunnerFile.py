@@ -8,32 +8,23 @@ class BC:
 
     def encadenamientoAdelante(self):
         print("Encadenameinto hacia adelante")
+        i = 0
         while True:
-            bandera = False
+            i += 1
+            continuar = False
             for regla in self.reglas:
-                if (regla.getOperador() == "=>") and ((regla.getOperando1() in hechos) and (not (regla.getOperando2() in hechos))):
+                print(regla.getOperando1().evaluar())
+                if (regla.getOperador() == "=>") and ((regla.getOperando1.evaluar()) and (not (regla.getOperando2() in hechos))):
+                    #print("Operando2: ", regla.getOperando2())
                     self.hechos.append(regla.getOperando2())
-                    print("Conclusion lógica : " + str(regla.getOperando2()))
-                    #self.reglas.append(regla.getOperando2())
-                    bandera = True
-            if bandera:
+                    self.reglas.append(regla.getOperando2())
+                    continuar = True #Si se añaden nuevos hechos, se debe seguir iterando
+            if (continuar == True):
                 break
-        #print("Salgo del ciclo")
+            if i == 10:
+                break #Para evitar bucles infinitos
+        print("Salgo del ciclo")
         return self.hechos
-    
-    def esCompleto(self):
-        # Obtener todos los hechos posibles derivados de las reglas
-        hechos_derivados = set(str(h) for h in self.encadenamientoAdelante())
-        
-        # Obtener todos los hechos esperados (modelos lógicos posibles)
-        hechos_esperados = set(str(h) for h in self.hechos)
-        for regla in self.reglas:
-            if regla.getOperador() == "=>":
-                hechos_esperados.add(str(regla.getOperando2()))
-        
-        # Verificar si todos los hechos esperados son derivables
-        return hechos_esperados.issubset(hechos_derivados)
-
     
     def getHechos(self):
         return self.hechos 
@@ -70,7 +61,10 @@ class BC:
             elif self.operador == '=>':
                 return not self.evaluar(self.operando1) or self.evaluar(self.operando2)
             elif self.operador == None:
-                return True
+                if (self.operador in hechos):
+                    return True
+                else:
+                    return None
             else:
                 return False
         
@@ -81,19 +75,16 @@ class BC:
 if __name__ == '__main__':
 
     # Literales
-
-    Llueve = "Llueve"
-    Mojado = "Mojado"
+    lit1 = BC.operacion(None, "Llueve", None)
+    lit2 = BC.operacion(None, "Mojado", None)
 
     # Hechos
     
-    op1 = BC.operacion(None, Llueve, None)
-    op2 = BC.operacion(None, Mojado, None)
-    op3 = BC.operacion("not", Llueve, None)
+    op1 = BC.operacion("not", lit1, None)
+    op2 = BC.operacion(None, lit2, None)
     
     hechos = [op1]
     aux = copy.deepcopy(hechos)
-    
 
     print("Hechos:")
     for i in aux:
@@ -101,7 +92,7 @@ if __name__ == '__main__':
 
     # Reglas
     
-    op3 = BC.operacion('=>', op1, op2)
+    op3 = BC.operacion('=>',lit1, lit2)
 
     reglas = [op3]
 
@@ -116,6 +107,4 @@ if __name__ == '__main__':
     for i in bc.getHechos():
         if i not in hechos:
             print(i)
-    print("Encadenamiento completo")
-    print(bc.esCompleto())
 
