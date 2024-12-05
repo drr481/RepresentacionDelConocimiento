@@ -1,4 +1,5 @@
 import copy
+import time
 
 class BC:
 
@@ -28,13 +29,14 @@ class BC:
             bandera = False
             for regla in self.reglas:
                 print("Regla: " + str(regla))
-                print("hechos[2] = " + str(self.hechos[2]))
                 print(str( regla.getOperando1() in self.hechos) + " " + str(not (regla.getOperando2() in self.hechos)))
                 if (regla.getOperador() == "=>") and ((regla.getOperando1() in self.hechos) and (not (regla.getOperando2() in self.hechos))):
                     self.hechos.append(regla.getOperando2())
                     print("Conclusion lógica : " + str(regla.getOperando2()))
                     #self.reglas.append(regla.getOperando2())
                     bandera = True
+                    print("bandera: " + str(bandera))
+                    time.sleep(1)
             print("##############################################")
             if bandera:
                 break
@@ -158,6 +160,6 @@ if __name__ == '__main__':
 
     bc = BC(aux, reglas)
     bc.encadenamientoAdelante()
-    #print(type(bc.getHechos()))
+    print(type(bc.getHechos()))
     print("¿El encadenamiento es completo? " + str(bc.esCompleto()))
 
