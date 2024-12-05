@@ -23,6 +23,9 @@ class BC:
     
     def reglas(self):
         return self.reglas
+
+    def variables(self):
+        pass
     
     class operacion:
         def __init__(self, operador, operando1, operando2):
