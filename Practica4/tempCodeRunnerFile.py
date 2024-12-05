@@ -31,9 +31,6 @@ class BC:
     
     def getReglas(self):
         return self.reglas
-
-    def variables(self):
-        pass
     
     class operacion:
         def __init__(self, operador, operando1, operando2):
@@ -84,7 +81,7 @@ if __name__ == '__main__':
     # Hechos
     
     op1 = BC.operacion("not", lit1, None)
-    op2 = BC.operacion(None, Mojado, None)
+    op2 = BC.operacion(None, lit2, None)
     
     hechos = [op1]
     aux = copy.deepcopy(hechos)
