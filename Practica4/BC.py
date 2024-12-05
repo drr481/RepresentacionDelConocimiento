@@ -11,15 +11,14 @@ class BC:
         while True:
             bandera = False
             for regla in self.reglas:
-                print(regla.getOperando1().evaluar())
                 if (regla.getOperador() == "=>") and ((regla.getOperando1() in hechos) and (not (regla.getOperando2() in hechos))):
-                    #print("Operando2: ", regla.getOperando2())
                     self.hechos.append(regla.getOperando2())
-                    self.reglas.append(regla.getOperando2())
+                    print("Conclusion lógica : " + str(regla.getOperando2()))
+                    #self.reglas.append(regla.getOperando2())
                     bandera = True
-            if (bandera == True):
+            if bandera:
                 break
-        print("Salgo del ciclo")
+        #print("Salgo del ciclo")
         return self.hechos
     
     def getHechos(self):
@@ -74,8 +73,9 @@ if __name__ == '__main__':
 
     # Hechos
     
-    op1 = BC.operacion("not", Llueve, None)
+    op1 = BC.operacion(None, Llueve, None)
     op2 = BC.operacion(None, Mojado, None)
+    op3 = BC.operacion("not", Llueve, None)
     
     hechos = [op1]
     aux = copy.deepcopy(hechos)
@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     # Reglas
     
-    op3 = BC.operacion('=>', BC.operacion(None, Llueve, None), op2)
+    op3 = BC.operacion('=>', op1, op2)
 
     reglas = [op3]
 
