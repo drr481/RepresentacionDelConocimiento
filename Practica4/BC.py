@@ -3,7 +3,23 @@ import copy
 class BC:
 
     def __init__(self, hechos, reglas):
+        print("Constructor de hechos")
         self.hechos = hechos
+        x=[]
+        for i in hechos:
+            x.append(i)
+        
+        for i in range(1,len(hechos)):
+            aux = len(x)
+            
+            for j in range(aux):
+                for k in hechos:
+                    if not k == x[j]:
+                        x.append(BC.operacion("and",k,x[j]))
+
+        for i in x:
+            self.hechos.append(i)
+
         self.reglas = reglas
 
     def encadenamientoAdelante(self):
@@ -11,11 +27,15 @@ class BC:
         while True:
             bandera = False
             for regla in self.reglas:
-                if (regla.getOperador() == "=>") and ((regla.getOperando1() in hechos) and (not (regla.getOperando2() in hechos))):
+                print("Regla: " + str(regla))
+                print("hechos[2] = " + str(self.hechos[2]))
+                print(str( regla.getOperando1() in self.hechos) + " " + str(not (regla.getOperando2() in self.hechos)))
+                if (regla.getOperador() == "=>") and ((regla.getOperando1() in self.hechos) and (not (regla.getOperando2() in self.hechos))):
                     self.hechos.append(regla.getOperando2())
                     print("Conclusion lógica : " + str(regla.getOperando2()))
                     #self.reglas.append(regla.getOperando2())
                     bandera = True
+            print("##############################################")
             if bandera:
                 break
         #print("Salgo del ciclo")
@@ -40,7 +60,17 @@ class BC:
     
     def getReglas(self):
         return self.reglas
-    
+
+    def generar_combinaciones_and(self, hechos):
+        if len(hechos) < 2:
+            return hechos
+        combinaciones = []
+        for i in range(len(hechos)):
+            for j in range(i + 1, len(hechos)):
+                combinaciones.append(BC.operacion("and", hechos[i], hechos[j]))
+
+        return combinaciones
+
     class operacion:
         def __init__(self, operador, operando1, operando2):
             self.operador = operador
@@ -76,35 +106,52 @@ class BC:
         
         def __str__(self):
             return "(" + str(self.operador) + ", " + str(self.operando1) + ", " + str(self.operando2) + ")"
-    
+
+        def __eq__(self, value: object) -> bool:
+            return self.operador == value.operador and self.operando1 == value.operando1 and self.operando2 == value.operando2
 
 if __name__ == '__main__':
 
     # Literales
-
-    Llueve = "Llueve"
-    Mojado = "Mojado"
-
+    
+    A = BC.operacion(None, "A", None)
+    B = BC.operacion(None, "B", None)
+    C = BC.operacion(None, "C", None)
+    D = BC.operacion(None, "D", None)
+    E = BC.operacion(None, "E", None)
+    F = BC.operacion(None, "F", None)
+    '''
+    
+    Llueve = BC.operacion(None, "Llueve", None)
+    Nieva = BC.operacion(None, "Nieva", None)
+    Mojado = BC.operacion(None, "Mojado", None)
+    '''
     # Hechos
     
-    op1 = BC.operacion(None, Llueve, None)
-    op2 = BC.operacion(None, Mojado, None)
-    op3 = BC.operacion("not", Llueve, None)
+    hechos = [B]
     
-    hechos = [op1]
-    aux = copy.deepcopy(hechos)
-    
+    #hechos = [Llueve, Nieva, Mojado]
+    aux = []
 
     print("Hechos:")
-    for i in aux:
+    for i in hechos:
         print(i)
+        aux.append(i)
 
     # Reglas
     
-    op3 = BC.operacion('=>', op1, op2)
-
-    reglas = [op3]
-
+    reglas = [
+        BC.operacion("=>", BC.operacion("and",A,C), E),
+        BC.operacion("=>", B, C),
+        BC.operacion("=>", BC.operacion("and",B,D), F),
+        BC.operacion("=>", C, D)
+    ]
+    '''
+    
+    reglas = [
+        BC.operacion("=>", BC.operacion("or",Llueve,Nieva), Mojado)
+    ]
+    '''
     print("Reglas:")
     for i in reglas:
         print(i)
@@ -112,10 +159,5 @@ if __name__ == '__main__':
     bc = BC(aux, reglas)
     bc.encadenamientoAdelante()
     #print(type(bc.getHechos()))
-    print("Solución:")
-    for i in bc.getHechos():
-        if i not in hechos:
-            print(i)
-    print("Encadenamiento completo")
-    print(bc.esCompleto())
+    print("¿El encadenamiento es completo? " + str(bc.esCompleto()))
 
