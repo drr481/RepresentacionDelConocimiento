@@ -36,9 +36,7 @@ class BC:
                     #self.reglas.append(regla.getOperando2())
                     bandera = True
             print("##############################################")
-            print("bandera: " + str(bandera))
-            time.sleep(1)
-            if bandera:
+            if not bandera:
                 break
         #print("Salgo del ciclo")
         return self.hechos
@@ -160,6 +158,6 @@ if __name__ == '__main__':
 
     bc = BC(aux, reglas)
     bc.encadenamientoAdelante()
-    print(type(bc.getHechos()))
+    #print(type(bc.getHechos()))
     print("¿El encadenamiento es completo? " + str(bc.esCompleto()))
 
