@@ -35,9 +35,9 @@ class BC:
                     print("Conclusion lógica : " + str(regla.getOperando2()))
                     #self.reglas.append(regla.getOperando2())
                     bandera = True
-                    print("bandera: " + str(bandera))
-                    time.sleep(1)
             print("##############################################")
+            print("bandera: " + str(bandera))
+            time.sleep(1)
             if bandera:
                 break
         #print("Salgo del ciclo")
